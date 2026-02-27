@@ -1,0 +1,67 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/astro/Header.astro';
+import Footer from '../components/astro/Footer.astro';
+import { formatDate, readingTime } from '../lib/utils';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  heroImage?: string;
+  tags?: string[];
+}
+
+const { title, description, pubDate, updatedDate, heroImage, tags = [] } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} ogImage={heroImage}>
+  <Header />
+  <main class="min-h-screen pt-24">
+    <article class="mx-auto max-w-3xl px-6">
+      <!-- 文章头部 -->
+      <header class="mb-12">
+        {heroImage && (
+          <img
+            src={heroImage}
+            alt={title}
+            class="mb-8 w-full rounded-2xl object-cover"
+            transition:name={`blog-hero-${title}`}
+          />
+        )}
+        <div class="mb-4 flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span class="rounded-full bg-(--color-bg-elevated) px-3 py-1 text-sm text-(--color-accent-cyan)">
+              #{tag}
+            </span>
+          ))}
+        </div>
+        <h1
+          class="mb-4 font-(family-name:--font-display) text-(length:--text-display) font-bold leading-tight"
+        >
+          {title}
+        </h1>
+        <div class="flex items-center gap-4 text-sm text-(--color-text-muted)">
+          <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+          {updatedDate && (
+            <span>· 更新于 {formatDate(updatedDate)}</span>
+          )}
+        </div>
+      </header>
+
+      <!-- 文章正文 -->
+      <div class="prose prose-invert prose-lg max-w-none
+        prose-headings:font-(family-name:--font-display)
+        prose-a:text-(--color-accent-violet) prose-a:no-underline hover:prose-a:underline
+        prose-code:font-(family-name:--font-mono) prose-code:text-(--color-accent-cyan)
+        prose-pre:bg-(--color-bg-secondary) prose-pre:border prose-pre:border-(--color-border-default) prose-pre:rounded-xl
+        prose-img:rounded-xl
+        prose-blockquote:border-l-(--color-accent-violet)
+      ">
+        <slot />
+      </div>
+    </article>
+  </main>
+  <Footer />
+</BaseLayout>
