@@ -63,9 +63,9 @@ function InteractiveItem({ children, name, position, onHover, onClick }: {
       {children}
       {/* 悬停发光底圈 */}
       {hovered && (
-        <mesh position={[0, -0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <mesh position={[0, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={999}>
           <ringGeometry args={[0.2, 0.45, 32]} />
-          <meshBasicMaterial color={COLORS.lamp} transparent opacity={0.4} />
+          <meshBasicMaterial color={COLORS.lamp} transparent opacity={0.4} depthTest={false} depthWrite={false} />
         </mesh>
       )}
     </group>
