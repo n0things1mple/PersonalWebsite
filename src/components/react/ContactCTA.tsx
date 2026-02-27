@@ -6,12 +6,12 @@ export default function ContactCTA() {
   return (
     <section className="relative overflow-hidden py-24">
       {/* 背景渐变 */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(124,58,237,0.05)] to-transparent" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(124,58,237,0.1)_0%,_transparent_70%)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(226,166,61,0.05)] to-transparent" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(226,166,61,0.1)_0%,_transparent_70%)]" />
 
       <div className="relative mx-auto max-w-4xl px-6 text-center">
         <ScrollReveal>
-          <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-[var(--color-accent-cyan)]">
+          <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-[var(--color-accent-teal)]">
             Get in Touch
           </p>
           <h2
@@ -19,7 +19,7 @@ export default function ContactCTA() {
             style={{ fontSize: "var(--text-display)" }}
           >
             一起创造
-            <span className="bg-gradient-to-r from-[var(--color-accent-violet)] via-[var(--color-accent-pink)] to-[var(--color-accent-cyan)] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[var(--color-accent-gold)] via-[var(--color-accent-coral)] to-[var(--color-accent-teal)] bg-clip-text text-transparent">
               精彩
             </span>
             的事物
@@ -35,8 +35,8 @@ export default function ContactCTA() {
               href="/contact"
               className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl px-8 py-3.5 font-medium text-white transition-all duration-300"
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-[var(--color-accent-violet)] to-[var(--color-accent-pink)]" />
-              <span className="absolute -inset-1 rounded-xl bg-gradient-to-r from-[var(--color-accent-violet)] to-[var(--color-accent-pink)] opacity-0 blur-lg transition-opacity duration-300 group-hover:opacity-40" />
+              <span className="absolute inset-0 bg-gradient-to-r from-[var(--color-accent-gold)] to-[var(--color-accent-coral)]" />
+              <span className="absolute -inset-1 rounded-xl bg-gradient-to-r from-[var(--color-accent-gold)] to-[var(--color-accent-coral)] opacity-0 blur-lg transition-opacity duration-300 group-hover:opacity-40" />
               <span className="relative">联系我</span>
               <svg className="relative h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
@@ -56,7 +56,7 @@ export default function ContactCTA() {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-secondary)] p-3 text-[var(--color-text-muted)] transition-colors duration-200 hover:border-[var(--color-accent-violet)] hover:text-[var(--color-accent-violet)]"
+                className="rounded-xl border border-[var(--color-border-default)] bg-[var(--color-bg-secondary)] p-3 text-[var(--color-text-muted)] transition-colors duration-200 hover:border-[var(--color-accent-gold)] hover:text-[var(--color-accent-gold)]"
                 title={link.name}
               >
                 {link.icon === 'github' && (

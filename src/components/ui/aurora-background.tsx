@@ -15,17 +15,17 @@ export function AuroraBackground({ children, className }: AuroraBackgroundProps)
           className="absolute -top-1/2 -left-1/4 h-[200%] w-[150%] animate-[aurora_13s_ease-in-out_infinite]"
           style={{
             background:
-              "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 58, 237, 0.3), transparent 70%), " +
-              "radial-gradient(ellipse 60% 40% at 70% 50%, rgba(236, 72, 153, 0.15), transparent 60%), " +
-              "radial-gradient(ellipse 50% 60% at 30% 80%, rgba(6, 182, 212, 0.2), transparent 60%)",
+              "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(226, 166, 61, 0.3), transparent 70%), " +
+              "radial-gradient(ellipse 60% 40% at 70% 50%, rgba(249, 112, 104, 0.15), transparent 60%), " +
+              "radial-gradient(ellipse 50% 60% at 30% 80%, rgba(78, 205, 196, 0.2), transparent 60%)",
           }}
         />
         <div
           className="absolute -top-1/2 -right-1/4 h-[200%] w-[150%] animate-[aurora2_17s_ease-in-out_infinite]"
           style={{
             background:
-              "radial-gradient(ellipse 70% 50% at 60% 30%, rgba(124, 58, 237, 0.2), transparent 60%), " +
-              "radial-gradient(ellipse 50% 70% at 20% 60%, rgba(236, 72, 153, 0.1), transparent 50%)",
+              "radial-gradient(ellipse 70% 50% at 60% 30%, rgba(226, 166, 61, 0.2), transparent 60%), " +
+              "radial-gradient(ellipse 50% 70% at 20% 60%, rgba(249, 112, 104, 0.1), transparent 50%)",
           }}
         />
       </div>

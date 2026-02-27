@@ -10,25 +10,25 @@
 @import "@fontsource/inter/600.css";
 @import "@fontsource/jetbrains-mono/400.css";
 
-/* ===== 设计系统: 自定义主题 ===== */
+/* ===== 设计系统: 温暖暗色主题 ===== */
 @theme {
-  /* 颜色 */
-  --color-bg-primary: #0A0A0F;
-  --color-bg-secondary: #141420;
-  --color-bg-elevated: #1E1E2E;
-  --color-bg-hover: #262638;
+  /* 颜色 — 夜晚工作室氛围 */
+  --color-bg-primary: #1a1a2e;
+  --color-bg-secondary: #16213e;
+  --color-bg-elevated: #1e2a4a;
+  --color-bg-hover: #253350;
 
-  --color-accent-violet: #7C3AED;
-  --color-accent-pink: #EC4899;
-  --color-accent-cyan: #06B6D4;
-  --color-accent-lime: #84CC16;
+  --color-accent-gold: #e2a63d;
+  --color-accent-coral: #f97068;
+  --color-accent-teal: #4ecdc4;
+  --color-accent-lavender: #a78bfa;
 
-  --color-text-primary: #F8FAFC;
-  --color-text-secondary: #94A3B8;
-  --color-text-muted: #64748B;
+  --color-text-primary: #eee8d5;
+  --color-text-secondary: #a0a0b8;
+  --color-text-muted: #6b6b80;
 
-  --color-border-default: #1E293B;
-  --color-border-hover: #334155;
+  --color-border-default: #2a2a44;
+  --color-border-hover: #3a3a5c;
 
   /* 字体 */
   --font-display: 'Space Grotesk', system-ui, sans-serif;
@@ -36,7 +36,7 @@
   --font-mono: 'JetBrains Mono', monospace;
 
   /* 字号 */
-  --text-hero: clamp(3rem, 8vw, 6rem);
+  --text-hero: clamp(3rem, 8vw, 5.5rem);
   --text-display: clamp(2rem, 5vw, 3.5rem);
   --text-title: clamp(1.5rem, 3vw, 2.25rem);
 
@@ -53,8 +53,8 @@
 }
 
 @keyframes glow {
-  from { box-shadow: 0 0 20px rgba(124, 58, 237, 0.3); }
-  to { box-shadow: 0 0 40px rgba(124, 58, 237, 0.6); }
+  from { box-shadow: 0 0 20px rgba(226, 166, 61, 0.3); }
+  to { box-shadow: 0 0 40px rgba(226, 166, 61, 0.5); }
 }
 
 @keyframes shimmer {
@@ -66,7 +66,7 @@
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: var(--color-accent-violet) var(--color-bg-primary);
+  scrollbar-color: var(--color-accent-gold) var(--color-bg-primary);
 }
 
 body {
@@ -80,7 +80,7 @@ body {
 
 /* ===== 选中高亮 ===== */
 ::selection {
-  background-color: rgba(124, 58, 237, 0.3);
+  background-color: rgba(226, 166, 61, 0.3);
   color: var(--color-text-primary);
 }
 
@@ -92,20 +92,20 @@ body {
   background: var(--color-bg-primary);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-accent-violet);
+  background: var(--color-accent-gold);
   border-radius: 3px;
 }
 
 /* ===== 渐变文字工具类 ===== */
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-accent-violet), var(--color-accent-pink));
+  background: linear-gradient(135deg, var(--color-accent-gold), var(--color-accent-coral));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.gradient-text-cyan {
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-violet));
+.gradient-text-teal {
+  background: linear-gradient(135deg, var(--color-accent-teal), var(--color-accent-gold));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -120,7 +120,7 @@ body {
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(135deg, var(--color-accent-violet), var(--color-accent-pink));
+  background: linear-gradient(135deg, var(--color-accent-gold), var(--color-accent-coral));
   z-index: -1;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -131,8 +131,8 @@ body {
 
 /* ===== 玻璃态效果 ===== */
 .glass {
-  background: rgba(20, 20, 32, 0.6);
+  background: rgba(22, 33, 62, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(238, 232, 213, 0.08);
 }

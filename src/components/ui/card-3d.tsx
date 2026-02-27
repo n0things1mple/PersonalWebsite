@@ -40,7 +40,7 @@ export function Card3D({ children, className, containerClassName }: Card3DProps)
         animate={{ rotateX, rotateY }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className={cn(
-          "relative transform-gpu rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-secondary)] transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(124,58,237,0.15)]",
+          "relative transform-gpu rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-secondary)] transition-shadow duration-300 hover:shadow-[0_0_30px_rgba(226,166,61,0.15)]",
           className
         )}
         style={{ transformStyle: "preserve-3d" }}

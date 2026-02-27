@@ -42,7 +42,7 @@ export function Spotlight({ className, size = 400 }: SpotlightProps) {
           top: "var(--spotlight-y, 50%)",
           transform: "translate(-50%, -50%)",
           background:
-            "radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, rgba(236, 72, 153, 0.08) 40%, transparent 70%)",
+            "radial-gradient(circle, rgba(226, 166, 61, 0.15) 0%, rgba(249, 112, 104, 0.08) 40%, transparent 70%)",
           filter: "blur(20px)",
         }}
       />

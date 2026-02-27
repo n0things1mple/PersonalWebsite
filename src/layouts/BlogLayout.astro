@@ -32,7 +32,7 @@ const { title, description, pubDate, updatedDate, heroImage, tags = [] } = Astro
         )}
         <div class="mb-4 flex flex-wrap gap-2">
           {tags.map((tag) => (
-            <span class="rounded-full bg-(--color-bg-elevated) px-3 py-1 text-sm text-(--color-accent-cyan)">
+            <span class="rounded-full bg-(--color-bg-elevated) px-3 py-1 text-sm text-(--color-accent-teal)">
               #{tag}
             </span>
           ))}
@@ -53,11 +53,11 @@ const { title, description, pubDate, updatedDate, heroImage, tags = [] } = Astro
       <!-- 文章正文 -->
       <div class="prose prose-invert prose-lg max-w-none
         prose-headings:font-(family-name:--font-display)
-        prose-a:text-(--color-accent-violet) prose-a:no-underline hover:prose-a:underline
-        prose-code:font-(family-name:--font-mono) prose-code:text-(--color-accent-cyan)
+        prose-a:text-(--color-accent-gold) prose-a:no-underline hover:prose-a:underline
+        prose-code:font-(family-name:--font-mono) prose-code:text-(--color-accent-teal)
         prose-pre:bg-(--color-bg-secondary) prose-pre:border prose-pre:border-(--color-border-default) prose-pre:rounded-xl
         prose-img:rounded-xl
-        prose-blockquote:border-l-(--color-accent-violet)
+        prose-blockquote:border-l-(--color-accent-gold)
       ">
         <slot />
       </div>

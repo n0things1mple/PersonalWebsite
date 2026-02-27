@@ -53,7 +53,7 @@ export function TypewriterEffect({
       <span>{currentText}</span>
       <span
         className="ml-0.5 inline-block h-[1em] w-[2px] animate-pulse"
-        style={{ backgroundColor: "#7C3AED" }}
+        style={{ backgroundColor: "#e2a63d" }}
       />
     </span>
   );

@@ -30,19 +30,19 @@ export default function LatestPosts() {
     <section className="relative py-24">
       {/* 背景装饰 */}
       <div className="absolute right-0 top-0">
-        <div className="h-[400px] w-[400px] rounded-full bg-[var(--color-accent-pink)] opacity-[0.03] blur-[100px]" />
+        <div className="h-[400px] w-[400px] rounded-full bg-[var(--color-accent-coral)] opacity-[0.03] blur-[100px]" />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-6">
         <ScrollReveal>
-          <p className="mb-2 text-center text-sm font-medium uppercase tracking-[0.2em] text-[var(--color-accent-cyan)]">
+          <p className="mb-2 text-center text-sm font-medium uppercase tracking-[0.2em] text-[var(--color-accent-teal)]">
             Blog
           </p>
           <h2
             className="mb-4 text-center font-[family-name:var(--font-display)] font-bold"
             style={{ fontSize: "var(--text-display)" }}
           >
-            <span className="bg-gradient-to-r from-[var(--color-accent-cyan)] to-[var(--color-accent-violet)] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[var(--color-accent-teal)] to-[var(--color-accent-gold)] bg-clip-text text-transparent">
               最新文章
             </span>
           </h2>
@@ -56,7 +56,7 @@ export default function LatestPosts() {
             <StaggerItem key={post.title}>
               <a
                 href="/blog"
-                className="group flex h-full flex-col rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-secondary)] p-6 transition-all duration-300 hover:border-[var(--color-accent-violet)] hover:shadow-[0_0_30px_rgba(124,58,237,0.12)]"
+                className="group flex h-full flex-col rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-secondary)] p-6 transition-all duration-300 hover:border-[var(--color-accent-gold)] hover:shadow-[0_0_30px_rgba(226,166,61,0.12)]"
               >
                 {/* 日期和阅读时间 */}
                 <div className="mb-3 flex items-center gap-3 text-xs text-[var(--color-text-muted)]">
@@ -66,7 +66,7 @@ export default function LatestPosts() {
                 </div>
 
                 {/* 标题 */}
-                <h3 className="mb-3 font-[family-name:var(--font-display)] text-lg font-semibold leading-snug text-[var(--color-text-primary)] transition-colors group-hover:text-[var(--color-accent-violet)]">
+                <h3 className="mb-3 font-[family-name:var(--font-display)] text-lg font-semibold leading-snug text-[var(--color-text-primary)] transition-colors group-hover:text-[var(--color-accent-gold)]">
                   {post.title}
                 </h3>
 
@@ -80,7 +80,7 @@ export default function LatestPosts() {
                   {post.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full bg-[var(--color-bg-elevated)] px-2.5 py-0.5 text-xs text-[var(--color-accent-cyan)]"
+                      className="rounded-full bg-[var(--color-bg-elevated)] px-2.5 py-0.5 text-xs text-[var(--color-accent-teal)]"
                     >
                       {tag}
                     </span>
@@ -88,7 +88,7 @@ export default function LatestPosts() {
                 </div>
 
                 {/* 阅读更多箭头 */}
-                <div className="mt-4 flex items-center gap-1 text-sm font-medium text-[var(--color-accent-violet)] opacity-0 transition-all duration-300 group-hover:opacity-100">
+                <div className="mt-4 flex items-center gap-1 text-sm font-medium text-[var(--color-accent-gold)] opacity-0 transition-all duration-300 group-hover:opacity-100">
                   阅读更多
                   <svg className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -103,7 +103,7 @@ export default function LatestPosts() {
           <div className="mt-10 text-center">
             <a
               href="/blog"
-              className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-accent-violet)] transition-colors hover:text-[var(--color-accent-pink)]"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-accent-gold)] transition-colors hover:text-[var(--color-accent-coral)]"
             >
               查看全部文章
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

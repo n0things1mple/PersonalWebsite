@@ -66,14 +66,14 @@ export default function FeaturedProjects() {
   return (
     <section className="relative mx-auto max-w-6xl px-6 py-24">
       <ScrollReveal>
-        <p className="mb-2 text-center text-sm font-medium uppercase tracking-[0.2em] text-[var(--color-accent-cyan)]">
+        <p className="mb-2 text-center text-sm font-medium uppercase tracking-[0.2em] text-[var(--color-accent-teal)]">
           Portfolio
         </p>
         <h2
           className="mb-4 text-center font-[family-name:var(--font-display)] font-bold"
           style={{ fontSize: "var(--text-display)" }}
         >
-          <span className="bg-gradient-to-r from-[var(--color-accent-violet)] to-[var(--color-accent-pink)] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[var(--color-accent-gold)] to-[var(--color-accent-coral)] bg-clip-text text-transparent">
             精选项目
           </span>
         </h2>
@@ -104,7 +104,7 @@ export default function FeaturedProjects() {
         <div className="mt-10 text-center">
           <a
             href="/projects"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-accent-violet)] transition-colors hover:text-[var(--color-accent-pink)]"
+            className="inline-flex items-center gap-2 text-sm font-medium text-[var(--color-accent-gold)] transition-colors hover:text-[var(--color-accent-coral)]"
           >
             查看全部项目
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

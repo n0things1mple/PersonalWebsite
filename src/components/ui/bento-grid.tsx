@@ -50,7 +50,7 @@ export function BentoGridItem({
       {...(wrapperProps as any)}
       className={cn(
         "group relative overflow-hidden rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-bg-secondary)] p-6 transition-all duration-300",
-        "hover:border-[var(--color-accent-violet)] hover:shadow-[0_0_30px_rgba(124,58,237,0.12)]",
+        "hover:border-[var(--color-accent-gold)] hover:shadow-[0_0_30px_rgba(226,166,61,0.12)]",
         href && "cursor-pointer",
         className
       )}
@@ -58,7 +58,7 @@ export function BentoGridItem({
       {/* 悬停渐变背景 */}
       <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
-          background: "radial-gradient(ellipse at 50% 0%, rgba(124, 58, 237, 0.08), transparent 70%)",
+          background: "radial-gradient(ellipse at 50% 0%, rgba(226, 166, 61, 0.08), transparent 70%)",
         }}
       />
 
@@ -73,8 +73,8 @@ export function BentoGridItem({
             />
           </div>
         )}
-        {icon && <div className="mb-3 text-[var(--color-accent-violet)]">{icon}</div>}
-        <h3 className="mb-2 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--color-text-primary)] transition-colors group-hover:text-[var(--color-accent-violet)]">
+        {icon && <div className="mb-3 text-[var(--color-accent-gold)]">{icon}</div>}
+        <h3 className="mb-2 font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--color-text-primary)] transition-colors group-hover:text-[var(--color-accent-gold)]">
           {title}
         </h3>
         <p className="mb-3 flex-grow text-sm leading-relaxed text-[var(--color-text-secondary)]">
@@ -85,7 +85,7 @@ export function BentoGridItem({
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-[var(--color-bg-elevated)] px-2.5 py-0.5 text-xs text-[var(--color-accent-cyan)]"
+                className="rounded-full bg-[var(--color-bg-elevated)] px-2.5 py-0.5 text-xs text-[var(--color-accent-teal)]"
               >
                 {tag}
               </span>
