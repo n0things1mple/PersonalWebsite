@@ -1,37 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/astro/Header.astro';
-import Footer from '../components/astro/Footer.astro';
 import HeroSection from '../components/react/HeroSection';
-import FeaturedProjects from '../components/react/FeaturedProjects';
-import AboutPreview from '../components/react/AboutPreview';
-import LatestPosts from '../components/react/LatestPosts';
-import ContactCTA from '../components/react/ContactCTA';
 import { SITE } from '../lib/constants';
 ---
 
 <BaseLayout title={SITE.title} description={SITE.description}>
-  <Header />
-
-  <!-- Hero: client:load 确保首屏动画立即执行 -->
+  <!-- 全屏 3D 桌面导航 -->
   <HeroSection client:load />
-
-  <!-- 精选项目: 滚动到时才加载 -->
-  <FeaturedProjects client:visible />
-
-  <!-- 关于预览: 滚动到时才加载 -->
-  <AboutPreview client:visible />
-
-  <!-- 分隔线装饰 -->
-  <div class="mx-auto max-w-xs">
-    <div class="h-px bg-gradient-to-r from-transparent via-(--color-accent-gold) to-transparent opacity-30"></div>
-  </div>
-
-  <!-- 最新博客: 滚动到时才加载 -->
-  <LatestPosts client:visible />
-
-  <!-- 联系 CTA: 滚动到时才加载 -->
-  <ContactCTA client:visible />
-
-  <Footer />
 </BaseLayout>
