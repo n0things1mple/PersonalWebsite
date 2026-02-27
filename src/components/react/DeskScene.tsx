@@ -3,27 +3,40 @@ import { OrbitControls, Environment, Float, RoundedBox } from "@react-three/drei
 import { Suspense, useState, useRef, useCallback } from "react";
 import * as THREE from "three";
 
-// ===== 明亮卡通配色 =====
+// ===== 温馨暖色调 =====
 const C = {
   // 房间
-  floor: "#F5DEB3",
-  floorBoard: "#E8CFA0",
-  wall: "#FFF8F0",
-  wallSide: "#FFF0E5",
-  baseboard: "#E8D5C0",
-  windowFrame: "#FFFFFF",
-  windowSill: "#F0E0D0",
-  sky: "#87CEEB",
-  cloud: "#FFFFFF",
-  rug: "#B8D4E3",
-  rugBorder: "#9CC4D8",
+  floor: "#D4A574",
+  floorLine: "#C89860",
+  wall: "#FFF5E8",
+  wallSide: "#FFF0E0",
+  baseboard: "#D4A574",
+  ceiling: "#FFF8F2",
+
+  // 窗户
+  windowFrame: "#E8D5C0",
+  windowSill: "#D4A574",
+
+  // 窗外风景
+  skyTop: "#FF9E6C",
+  skyMid: "#FFD4A8",
+  skyBottom: "#FFF0D0",
+  sun: "#FFE4A0",
+  sunGlow: "#FFCC66",
+  mountain1: "#8B7EC8",
+  mountain2: "#A594D6",
+  mountain3: "#BEB0E0",
+  hill: "#6AAF6A",
+  hillDark: "#5A9A5A",
+  tree: "#4A8A4A",
+  treeDark: "#3A7A3A",
 
   // 家具
-  desk: "#C4915A",
-  deskLeg: "#A67B4B",
+  desk: "#B8834A",
+  deskLeg: "#9A6B3A",
 
   // 桌面物品
-  monitor: "#4A4A6E",
+  monitor: "#3D3D5C",
   screen: "#7DD3C8",
   screenCode1: "#FFB347",
   screenCode2: "#87CEEB",
@@ -31,29 +44,25 @@ const C = {
   keycap: "#D0D0E0",
   keycapAccent: "#FFD700",
   mouse: "#E8E8F0",
-  cup: "#FFFFFF",
+  cup: "#FFFAF5",
   coffee: "#8B5E3C",
   book1: "#FFB347",
   book2: "#FF6B6B",
   book3: "#4ECDC4",
-  gamepad: "#8080B0",
+  gamepad: "#7070A0",
   gamepadBtn: "#FF6B6B",
-  camera: "#8888AA",
-  cameraLens: "#3A3A50",
+  camera: "#7A7AA0",
+  cameraLens: "#2A2A3E",
   cameraRec: "#FF4444",
-  plant: "#66CC77",
-  plantDark: "#4AAA5A",
-  pot: "#FFB347",
+  plant: "#66BB66",
+  plantDark: "#4A9A4A",
+  pot: "#D4915A",
   lamp: "#FFD700",
   lampShade: "#FFF5CC",
   pencil: "#FF6B6B",
-  paper: "#FFFFFF",
-
-  // 墙面装饰
-  frame: "#C4915A",
-  poster: "#FFE4B5",
-  clock: "#FFFFFF",
-  clockHand: "#4A4A6E",
+  paper: "#FFFAF5",
+  frame: "#B8834A",
+  poster: "#FFE8D0",
 };
 
 // ===== 物品 → 页面映射 =====
@@ -97,160 +106,237 @@ function InteractiveItem({ children, name, position, onHover, onClick }: {
   );
 }
 
-// ===== 房间结构 =====
+// ===== 窗外风景（远景，在墙后面很远处）=====
+function Scenery() {
+  return (
+    <group position={[0.5, 0, -14]}>
+      {/* 天空 — 大背景 */}
+      <mesh position={[0, 8, -2]}>
+        <planeGeometry args={[40, 10]} />
+        <meshBasicMaterial color={C.skyTop} />
+      </mesh>
+      <mesh position={[0, 4, -2]}>
+        <planeGeometry args={[40, 6]} />
+        <meshBasicMaterial color={C.skyMid} />
+      </mesh>
+      <mesh position={[0, 1.5, -2]}>
+        <planeGeometry args={[40, 4]} />
+        <meshBasicMaterial color={C.skyBottom} />
+      </mesh>
+
+      {/* 太阳 */}
+      <mesh position={[3, 6, -1]}>
+        <circleGeometry args={[1.2, 32]} />
+        <meshBasicMaterial color={C.sun} />
+      </mesh>
+      <mesh position={[3, 6, -1.1]}>
+        <circleGeometry args={[2, 32]} />
+        <meshBasicMaterial color={C.sunGlow} transparent opacity={0.3} />
+      </mesh>
+
+      {/* 远山 */}
+      {[[-8, 1.2], [-4, 2], [0, 1.5], [4, 1.8], [8, 1.3]].map(([x, h], i) => (
+        <mesh key={`m3-${i}`} position={[x, h / 2, 0]}>
+          <coneGeometry args={[3.5, h * 2, 3]} />
+          <meshBasicMaterial color={C.mountain3} />
+        </mesh>
+      ))}
+      {/* 中山 */}
+      {[[-6, 2], [-2, 2.8], [2, 2.2], [6, 2.5]].map(([x, h], i) => (
+        <mesh key={`m2-${i}`} position={[x, h / 2 - 0.3, 1]}>
+          <coneGeometry args={[3, h * 2, 3]} />
+          <meshBasicMaterial color={C.mountain2} />
+        </mesh>
+      ))}
+      {/* 近山 */}
+      {[[-7, 2.5], [-3, 3.2], [1, 2.8], [5, 3], [9, 2.6]].map(([x, h], i) => (
+        <mesh key={`m1-${i}`} position={[x, h / 2 - 1, 2]}>
+          <coneGeometry args={[3, h * 2, 3]} />
+          <meshBasicMaterial color={C.mountain1} />
+        </mesh>
+      ))}
+
+      {/* 绿色丘陵 */}
+      <mesh position={[0, -0.5, 3]}>
+        <planeGeometry args={[40, 4]} />
+        <meshBasicMaterial color={C.hill} />
+      </mesh>
+
+      {/* 树木 */}
+      {[-9, -7, -5, -3, -1, 1, 3, 5, 7, 9].map((x, i) => {
+        const h = 1 + (i % 3) * 0.5;
+        const color = i % 2 === 0 ? C.tree : C.treeDark;
+        return (
+          <group key={`t-${i}`} position={[x, -0.5, 4]}>
+            <mesh position={[0, h * 0.4, 0]}><coneGeometry args={[0.5, h, 6]} /><meshBasicMaterial color={color} /></mesh>
+            <mesh position={[0, h * 0.9, 0]}><coneGeometry args={[0.4, h * 0.6, 6]} /><meshBasicMaterial color={color} /></mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+// ===== 房间 =====
 function Room() {
   return (
     <group>
       {/* 地板 */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0.5]} receiveShadow>
-        <planeGeometry args={[8, 7]} />
-        <meshStandardMaterial color={C.floor} roughness={0.8} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
+        <planeGeometry args={[10, 8]} />
+        <meshStandardMaterial color={C.floor} roughness={0.7} />
       </mesh>
-      {/* 地板条纹装饰 */}
-      {Array.from({ length: 8 }).map((_, i) => (
-        <mesh key={`fb${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[-3.5 + i, 0.001, 0.5]}>
-          <planeGeometry args={[0.02, 7]} />
-          <meshStandardMaterial color={C.floorBoard} roughness={0.9} />
+      {/* 地板条纹 */}
+      {Array.from({ length: 10 }).map((_, i) => (
+        <mesh key={`fl${i}`} rotation={[-Math.PI / 2, 0, 0]} position={[-4.5 + i, 0.001, 0]}>
+          <planeGeometry args={[0.02, 8]} />
+          <meshStandardMaterial color={C.floorLine} />
         </mesh>
       ))}
 
-      {/* 后墙 */}
-      <mesh position={[0, 2, -3]} receiveShadow>
-        <planeGeometry args={[8, 4]} />
+      {/* 后墙 — 窗户处挖空，分四块 */}
+      {/* 左段 */}
+      <mesh position={[-3.4, 2.5, -4]}>
+        <planeGeometry args={[3.2, 5]} />
+        <meshStandardMaterial color={C.wall} roughness={0.9} />
+      </mesh>
+      {/* 右段 */}
+      <mesh position={[3.9, 2.5, -4]}>
+        <planeGeometry args={[2.2, 5]} />
+        <meshStandardMaterial color={C.wall} roughness={0.9} />
+      </mesh>
+      {/* 上段（窗户上方）*/}
+      <mesh position={[0.5, 4.5, -4]}>
+        <planeGeometry args={[4.6, 1]} />
+        <meshStandardMaterial color={C.wall} roughness={0.9} />
+      </mesh>
+      {/* 下段（窗户下方）*/}
+      <mesh position={[0.5, 0.6, -4]}>
+        <planeGeometry args={[4.6, 1.2]} />
         <meshStandardMaterial color={C.wall} roughness={0.9} />
       </mesh>
 
-      {/* 左墙 */}
-      <mesh position={[-4, 2, 0.5]} rotation={[0, Math.PI / 2, 0]} receiveShadow>
-        <planeGeometry args={[7, 4]} />
+      {/* 后墙踢脚线 */}
+      <mesh position={[0, 0.12, -3.97]}>
+        <boxGeometry args={[10, 0.25, 0.08]} />
+        <meshStandardMaterial color={C.baseboard} roughness={0.6} />
+      </mesh>
+
+      {/* 左墙 (部分可见) */}
+      <mesh position={[-5, 2.5, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <planeGeometry args={[8, 5]} />
+        <meshStandardMaterial color={C.wallSide} roughness={0.9} />
+      </mesh>
+      {/* 右墙 (部分可见) */}
+      <mesh position={[5, 2.5, 0]} rotation={[0, -Math.PI / 2, 0]}>
+        <planeGeometry args={[8, 5]} />
         <meshStandardMaterial color={C.wallSide} roughness={0.9} />
       </mesh>
 
-      {/* 后墙踢脚线 */}
-      <mesh position={[0, 0.1, -2.98]}>
-        <boxGeometry args={[8, 0.2, 0.06]} />
-        <meshStandardMaterial color={C.baseboard} roughness={0.7} />
-      </mesh>
-      {/* 左墙踢脚线 */}
-      <mesh position={[-3.97, 0.1, 0.5]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[7, 0.2, 0.06]} />
-        <meshStandardMaterial color={C.baseboard} roughness={0.7} />
-      </mesh>
-
       {/* 地毯 */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 1]}>
-        <planeGeometry args={[3.5, 2.5]} />
-        <meshStandardMaterial color={C.rug} roughness={0.95} />
-      </mesh>
-      {/* 地毯边框 */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.004, 1]}>
-        <planeGeometry args={[3.8, 2.8]} />
-        <meshStandardMaterial color={C.rugBorder} roughness={0.95} />
-      </mesh>
+      <group position={[0, 0.003, 0.5]}>
+        <mesh rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[3.8, 2.8]} />
+          <meshStandardMaterial color="#C4A882" roughness={0.95} />
+        </mesh>
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0.001]}>
+          <planeGeometry args={[3.4, 2.4]} />
+          <meshStandardMaterial color="#D4B892" roughness={0.95} />
+        </mesh>
+      </group>
     </group>
   );
 }
 
-// ===== 窗户 =====
-function Window() {
+// ===== 大窗户 =====
+function BigWindow() {
+  const frameW = 4.5;
+  const frameH = 2.8;
+  const bar = 0.1;
+
   return (
-    <group position={[1.5, 2.6, -2.97]}>
-      {/* 天空 */}
-      <mesh>
-        <planeGeometry args={[1.6, 1.3]} />
-        <meshBasicMaterial color={C.sky} />
+    <group position={[0.5, 2.6, -3.96]}>
+      {/* 窗框 — 外框 */}
+      {/* 上 */}
+      <mesh position={[0, frameH / 2 + bar / 2, 0.02]}>
+        <boxGeometry args={[frameW + bar * 2, bar, 0.08]} />
+        <meshStandardMaterial color={C.windowFrame} roughness={0.4} />
       </mesh>
-      {/* 云朵装饰 */}
-      <mesh position={[-0.3, 0.3, 0.01]}>
-        <planeGeometry args={[0.5, 0.15]} />
-        <meshBasicMaterial color={C.cloud} transparent opacity={0.8} />
+      {/* 下 */}
+      <mesh position={[0, -frameH / 2 - bar / 2, 0.02]}>
+        <boxGeometry args={[frameW + bar * 2, bar, 0.08]} />
+        <meshStandardMaterial color={C.windowFrame} roughness={0.4} />
       </mesh>
-      <mesh position={[0.4, 0.15, 0.01]}>
-        <planeGeometry args={[0.35, 0.1]} />
-        <meshBasicMaterial color={C.cloud} transparent opacity={0.6} />
+      {/* 左 */}
+      <mesh position={[-frameW / 2 - bar / 2, 0, 0.02]}>
+        <boxGeometry args={[bar, frameH, 0.08]} />
+        <meshStandardMaterial color={C.windowFrame} roughness={0.4} />
       </mesh>
-      {/* 窗框 - 上下左右 */}
-      <mesh position={[0, 0.7, 0.02]}>
-        <boxGeometry args={[1.8, 0.1, 0.06]} />
-        <meshStandardMaterial color={C.windowFrame} roughness={0.3} />
+      {/* 右 */}
+      <mesh position={[frameW / 2 + bar / 2, 0, 0.02]}>
+        <boxGeometry args={[bar, frameH, 0.08]} />
+        <meshStandardMaterial color={C.windowFrame} roughness={0.4} />
       </mesh>
-      <mesh position={[0, -0.7, 0.02]}>
-        <boxGeometry args={[1.8, 0.1, 0.06]} />
-        <meshStandardMaterial color={C.windowFrame} roughness={0.3} />
-      </mesh>
-      <mesh position={[-0.85, 0, 0.02]}>
-        <boxGeometry args={[0.1, 1.3, 0.06]} />
-        <meshStandardMaterial color={C.windowFrame} roughness={0.3} />
-      </mesh>
-      <mesh position={[0.85, 0, 0.02]}>
-        <boxGeometry args={[0.1, 1.3, 0.06]} />
-        <meshStandardMaterial color={C.windowFrame} roughness={0.3} />
-      </mesh>
-      {/* 十字窗棂 */}
+      {/* 中间竖棂 */}
       <mesh position={[0, 0, 0.02]}>
-        <boxGeometry args={[1.6, 0.05, 0.04]} />
-        <meshStandardMaterial color={C.windowFrame} roughness={0.3} />
+        <boxGeometry args={[0.06, frameH, 0.06]} />
+        <meshStandardMaterial color={C.windowFrame} roughness={0.4} />
       </mesh>
-      <mesh position={[0, 0, 0.02]}>
-        <boxGeometry args={[0.05, 1.3, 0.04]} />
-        <meshStandardMaterial color={C.windowFrame} roughness={0.3} />
+      {/* 中间横棂 */}
+      <mesh position={[0, 0.2, 0.02]}>
+        <boxGeometry args={[frameW, 0.06, 0.06]} />
+        <meshStandardMaterial color={C.windowFrame} roughness={0.4} />
       </mesh>
+
       {/* 窗台 */}
-      <mesh position={[0, -0.75, 0.12]}>
-        <boxGeometry args={[1.9, 0.06, 0.25]} />
+      <mesh position={[0, -frameH / 2 - bar, 0.15]}>
+        <boxGeometry args={[frameW + 0.4, 0.08, 0.3]} />
         <meshStandardMaterial color={C.windowSill} roughness={0.5} />
       </mesh>
+      {/* 窗台上的小盆栽 */}
+      <group position={[1.6, -frameH / 2 - bar + 0.12, 0.15]}>
+        <mesh>
+          <cylinderGeometry args={[0.05, 0.04, 0.08, 8]} />
+          <meshStandardMaterial color={C.pot} roughness={0.6} />
+        </mesh>
+        {[0, 1.5, 3, 4.5].map((a, i) => (
+          <mesh key={i} position={[Math.cos(a) * 0.02, 0.06 + i * 0.008, Math.sin(a) * 0.02]}>
+            <sphereGeometry args={[0.03, 5, 4]} />
+            <meshStandardMaterial color={i % 2 === 0 ? C.plant : C.plantDark} roughness={0.8} />
+          </mesh>
+        ))}
+      </group>
     </group>
   );
 }
 
-// ===== 墙面装饰：画框 =====
-function WallFrame() {
+// ===== 墙面画框 =====
+function WallArt() {
   return (
-    <group position={[-3.95, 2.5, -1]}>
-      <mesh rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[1, 0.8, 0.05]} />
-        <meshStandardMaterial color={C.frame} roughness={0.6} />
+    <group position={[-3.2, 2.8, -3.94]}>
+      {/* 画框 */}
+      <mesh>
+        <boxGeometry args={[0.9, 0.7, 0.04]} />
+        <meshStandardMaterial color={C.frame} roughness={0.5} />
       </mesh>
-      <mesh position={[0.03, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <planeGeometry args={[0.8, 0.6]} />
+      {/* 画布 */}
+      <mesh position={[0, 0, 0.025]}>
+        <planeGeometry args={[0.7, 0.5]} />
         <meshStandardMaterial color={C.poster} roughness={0.9} />
       </mesh>
-      {/* 简单的山水画装饰 */}
-      <mesh position={[0.035, -0.1, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <planeGeometry args={[0.6, 0.2]} />
-        <meshStandardMaterial color="#88BB88" roughness={0.9} />
+      {/* 简笔画 — 小山 */}
+      <mesh position={[-0.1, -0.08, 0.03]}>
+        <coneGeometry args={[0.15, 0.2, 3]} />
+        <meshBasicMaterial color="#88BB88" />
       </mesh>
-      <mesh position={[0.035, 0.15, 0.15]} rotation={[0, Math.PI / 2, 0]}>
-        <circleGeometry args={[0.08, 16]} />
-        <meshStandardMaterial color="#FFD700" roughness={0.9} />
+      <mesh position={[0.12, -0.05, 0.03]}>
+        <coneGeometry args={[0.1, 0.15, 3]} />
+        <meshBasicMaterial color="#99CC99" />
       </mesh>
-    </group>
-  );
-}
-
-// ===== 墙面装饰：时钟 =====
-function WallClock() {
-  return (
-    <group position={[-3.95, 3, 1.5]}>
-      <mesh rotation={[0, Math.PI / 2, 0]}>
-        <cylinderGeometry args={[0.25, 0.25, 0.04, 24]} />
-        <meshStandardMaterial color={C.clock} roughness={0.3} />
-      </mesh>
-      {/* 时针 */}
-      <mesh position={[0.025, 0.03, 0.02]} rotation={[0, Math.PI / 2, 0.5]}>
-        <boxGeometry args={[0.12, 0.02, 0.01]} />
-        <meshStandardMaterial color={C.clockHand} />
-      </mesh>
-      {/* 分针 */}
-      <mesh position={[0.025, -0.02, 0.05]} rotation={[0, Math.PI / 2, -0.8]}>
-        <boxGeometry args={[0.16, 0.015, 0.01]} />
-        <meshStandardMaterial color={C.clockHand} />
-      </mesh>
-      {/* 中心点 */}
-      <mesh position={[0.025, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <circleGeometry args={[0.02, 8]} />
-        <meshStandardMaterial color={C.cameraRec} />
+      {/* 小太阳 */}
+      <mesh position={[0.2, 0.12, 0.03]}>
+        <circleGeometry args={[0.05, 12]} />
+        <meshBasicMaterial color="#FFD700" />
       </mesh>
     </group>
   );
@@ -259,7 +345,7 @@ function WallClock() {
 // ===== 桌面 =====
 function Desk() {
   return (
-    <group position={[0, 0, -1.2]}>
+    <group position={[0, 0, -1.5]}>
       <RoundedBox args={[4, 0.12, 2]} radius={0.03} position={[0, 1, 0]}>
         <meshStandardMaterial color={C.desk} roughness={0.6} />
       </RoundedBox>
@@ -282,12 +368,12 @@ function Monitor() {
       </RoundedBox>
       <mesh position={[0, 0.55, 0.035]}>
         <planeGeometry args={[1.25, 0.75]} />
-        <meshStandardMaterial color={C.screen} emissive={C.screen} emissiveIntensity={0.15} roughness={0.1} />
+        <meshStandardMaterial color={C.screen} emissive={C.screen} emissiveIntensity={0.12} roughness={0.1} />
       </mesh>
       {[0.2, 0.08, -0.04, -0.16, -0.28].map((y, i) => (
         <mesh key={i} position={[-0.15 + i * 0.03, 0.55 + y, 0.038]}>
           <planeGeometry args={[0.5 + Math.random() * 0.4, 0.04]} />
-          <meshStandardMaterial color={i % 2 === 0 ? C.screenCode1 : C.screenCode2} emissive={i % 2 === 0 ? C.screenCode1 : C.screenCode2} emissiveIntensity={0.1} transparent opacity={0.7} />
+          <meshStandardMaterial color={i % 2 === 0 ? C.screenCode1 : C.screenCode2} emissive={i % 2 === 0 ? C.screenCode1 : C.screenCode2} emissiveIntensity={0.08} transparent opacity={0.7} />
         </mesh>
       ))}
       <mesh position={[0, 0.12, 0]}>
@@ -302,26 +388,24 @@ function Monitor() {
   );
 }
 
-// ===== 键盘 =====
 function Keyboard() {
   return (
     <group>
       <RoundedBox args={[1, 0.05, 0.4]} radius={0.02}>
         <meshStandardMaterial color={C.keyboard} roughness={0.5} />
       </RoundedBox>
-      {[-0.12, -0.04, 0.04, 0.12].map((z, row) => (
+      {[-0.12, -0.04, 0.04, 0.12].map((z, row) =>
         Array.from({ length: 10 }).map((_, col) => (
           <mesh key={`${row}-${col}`} position={[-0.36 + col * 0.08, 0.035, z]}>
             <boxGeometry args={[0.06, 0.02, 0.06]} />
             <meshStandardMaterial color={row === 1 && col === 4 ? C.keycapAccent : C.keycap} roughness={0.4} />
           </mesh>
         ))
-      ))}
+      )}
     </group>
   );
 }
 
-// ===== 鼠标 =====
 function Mouse() {
   return (
     <mesh>
@@ -331,7 +415,6 @@ function Mouse() {
   );
 }
 
-// ===== 咖啡杯 =====
 function CoffeeCup() {
   return (
     <group>
@@ -351,112 +434,57 @@ function CoffeeCup() {
   );
 }
 
-// ===== 书堆 =====
 function Books() {
   return (
     <group>
-      <RoundedBox args={[0.35, 0.06, 0.25]} radius={0.01} position={[0, 0, 0]}>
-        <meshStandardMaterial color={C.book1} roughness={0.7} />
-      </RoundedBox>
-      <RoundedBox args={[0.32, 0.05, 0.25]} radius={0.01} position={[0.01, 0.055, 0]}>
-        <meshStandardMaterial color={C.book2} roughness={0.7} />
-      </RoundedBox>
-      <RoundedBox args={[0.3, 0.04, 0.22]} radius={0.01} position={[-0.01, 0.1, 0]}>
-        <meshStandardMaterial color={C.book3} roughness={0.7} />
-      </RoundedBox>
+      <RoundedBox args={[0.35, 0.06, 0.25]} radius={0.01}><meshStandardMaterial color={C.book1} roughness={0.7} /></RoundedBox>
+      <RoundedBox args={[0.32, 0.05, 0.25]} radius={0.01} position={[0.01, 0.055, 0]}><meshStandardMaterial color={C.book2} roughness={0.7} /></RoundedBox>
+      <RoundedBox args={[0.3, 0.04, 0.22]} radius={0.01} position={[-0.01, 0.1, 0]}><meshStandardMaterial color={C.book3} roughness={0.7} /></RoundedBox>
     </group>
   );
 }
 
-// ===== 游戏手柄 =====
 function Gamepad() {
   return (
     <group rotation={[0.1, 0.3, 0]}>
-      <RoundedBox args={[0.3, 0.06, 0.2]} radius={0.03}>
-        <meshStandardMaterial color={C.gamepad} roughness={0.4} />
-      </RoundedBox>
-      <mesh position={[-0.12, -0.02, 0.06]} rotation={[0.3, 0, -0.2]}>
-        <capsuleGeometry args={[0.03, 0.08, 4, 8]} />
-        <meshStandardMaterial color={C.gamepad} roughness={0.4} />
-      </mesh>
-      <mesh position={[0.12, -0.02, 0.06]} rotation={[0.3, 0, 0.2]}>
-        <capsuleGeometry args={[0.03, 0.08, 4, 8]} />
-        <meshStandardMaterial color={C.gamepad} roughness={0.4} />
-      </mesh>
+      <RoundedBox args={[0.3, 0.06, 0.2]} radius={0.03}><meshStandardMaterial color={C.gamepad} roughness={0.4} /></RoundedBox>
+      <mesh position={[-0.12, -0.02, 0.06]} rotation={[0.3, 0, -0.2]}><capsuleGeometry args={[0.03, 0.08, 4, 8]} /><meshStandardMaterial color={C.gamepad} roughness={0.4} /></mesh>
+      <mesh position={[0.12, -0.02, 0.06]} rotation={[0.3, 0, 0.2]}><capsuleGeometry args={[0.03, 0.08, 4, 8]} /><meshStandardMaterial color={C.gamepad} roughness={0.4} /></mesh>
       {[[0.08, 0.04, -0.02], [0.11, 0.04, -0.05], [0.05, 0.04, -0.05], [0.08, 0.04, -0.08]].map((pos, i) => (
-        <mesh key={i} position={pos as [number, number, number]}>
-          <sphereGeometry args={[0.015, 8, 8]} />
-          <meshStandardMaterial
-            color={[C.gamepadBtn, C.lamp, C.screen, C.book1][i]}
-            emissive={[C.gamepadBtn, C.lamp, C.screen, C.book1][i]}
-            emissiveIntensity={0.2}
-          />
-        </mesh>
+        <mesh key={i} position={pos as [number, number, number]}><sphereGeometry args={[0.015, 8, 8]} /><meshStandardMaterial color={[C.gamepadBtn, C.lamp, C.screen, C.book1][i]} emissive={[C.gamepadBtn, C.lamp, C.screen, C.book1][i]} emissiveIntensity={0.2} /></mesh>
       ))}
-      <mesh position={[-0.06, 0.05, -0.04]}>
-        <cylinderGeometry args={[0.025, 0.025, 0.03, 8]} />
-        <meshStandardMaterial color="#3A3A50" roughness={0.3} />
-      </mesh>
+      <mesh position={[-0.06, 0.05, -0.04]}><cylinderGeometry args={[0.025, 0.025, 0.03, 8]} /><meshStandardMaterial color="#3A3A50" roughness={0.3} /></mesh>
     </group>
   );
 }
 
-// ===== 小摄像机 =====
 function Camera() {
   return (
     <group rotation={[0, -0.4, 0]}>
-      <RoundedBox args={[0.2, 0.14, 0.12]} radius={0.02}>
-        <meshStandardMaterial color={C.camera} roughness={0.4} />
-      </RoundedBox>
-      <mesh position={[0, 0, 0.1]}>
-        <cylinderGeometry args={[0.04, 0.05, 0.08, 16]} />
-        <meshStandardMaterial color={C.cameraLens} roughness={0.2} metalness={0.5} />
-      </mesh>
-      <mesh position={[0, 0, 0.145]}>
-        <circleGeometry args={[0.035, 16]} />
-        <meshStandardMaterial color="#8899BB" roughness={0.1} metalness={0.6} />
-      </mesh>
-      <mesh position={[0.08, 0.06, 0.04]}>
-        <sphereGeometry args={[0.012, 8, 8]} />
-        <meshStandardMaterial color={C.cameraRec} emissive={C.cameraRec} emissiveIntensity={0.8} />
-      </mesh>
+      <RoundedBox args={[0.2, 0.14, 0.12]} radius={0.02}><meshStandardMaterial color={C.camera} roughness={0.4} /></RoundedBox>
+      <mesh position={[0, 0, 0.1]}><cylinderGeometry args={[0.04, 0.05, 0.08, 16]} /><meshStandardMaterial color={C.cameraLens} roughness={0.2} metalness={0.5} /></mesh>
+      <mesh position={[0, 0, 0.145]}><circleGeometry args={[0.035, 16]} /><meshStandardMaterial color="#8899BB" roughness={0.1} metalness={0.6} /></mesh>
+      <mesh position={[0.08, 0.06, 0.04]}><sphereGeometry args={[0.012, 8, 8]} /><meshStandardMaterial color={C.cameraRec} emissive={C.cameraRec} emissiveIntensity={0.8} /></mesh>
     </group>
   );
 }
 
-// ===== 台灯 =====
 function DeskLamp() {
   return (
     <group>
-      <mesh>
-        <cylinderGeometry args={[0.1, 0.12, 0.04, 16]} />
-        <meshStandardMaterial color={C.lamp} roughness={0.3} metalness={0.3} />
-      </mesh>
-      <mesh position={[0, 0.25, 0]}>
-        <cylinderGeometry args={[0.015, 0.015, 0.5, 8]} />
-        <meshStandardMaterial color={C.lamp} roughness={0.3} metalness={0.3} />
-      </mesh>
-      <mesh position={[0.08, 0.48, 0]} rotation={[0, 0, -0.5]}>
-        <cylinderGeometry args={[0.015, 0.015, 0.2, 8]} />
-        <meshStandardMaterial color={C.lamp} roughness={0.3} metalness={0.3} />
-      </mesh>
-      <mesh position={[0.15, 0.52, 0]} rotation={[0, 0, -0.3]}>
-        <coneGeometry args={[0.1, 0.12, 16, 1, true]} />
-        <meshStandardMaterial color={C.lampShade} roughness={0.5} side={THREE.DoubleSide} />
-      </mesh>
-      <pointLight position={[0.15, 0.46, 0]} color="#FFF5CC" intensity={1.5} distance={3} decay={2} />
+      <mesh><cylinderGeometry args={[0.1, 0.12, 0.04, 16]} /><meshStandardMaterial color={C.lamp} roughness={0.3} metalness={0.3} /></mesh>
+      <mesh position={[0, 0.25, 0]}><cylinderGeometry args={[0.015, 0.015, 0.5, 8]} /><meshStandardMaterial color={C.lamp} roughness={0.3} metalness={0.3} /></mesh>
+      <mesh position={[0.08, 0.48, 0]} rotation={[0, 0, -0.5]}><cylinderGeometry args={[0.015, 0.015, 0.2, 8]} /><meshStandardMaterial color={C.lamp} roughness={0.3} metalness={0.3} /></mesh>
+      <mesh position={[0.15, 0.52, 0]} rotation={[0, 0, -0.3]}><coneGeometry args={[0.1, 0.12, 16, 1, true]} /><meshStandardMaterial color={C.lampShade} roughness={0.5} side={THREE.DoubleSide} /></mesh>
+      <pointLight position={[0.15, 0.46, 0]} color="#FFF0CC" intensity={1.5} distance={3} decay={2} />
     </group>
   );
 }
 
-// ===== 小盆栽 =====
 function Plant() {
   return (
     <group>
-      <mesh>
-        <cylinderGeometry args={[0.06, 0.05, 0.1, 8]} />
-        <meshStandardMaterial color={C.pot} roughness={0.6} />
-      </mesh>
+      <mesh><cylinderGeometry args={[0.06, 0.05, 0.1, 8]} /><meshStandardMaterial color={C.pot} roughness={0.6} /></mesh>
       {[0, 1.2, 2.4, 3.6, 4.8].map((angle, i) => (
         <mesh key={i} position={[Math.cos(angle) * 0.03, 0.08 + i * 0.01, Math.sin(angle) * 0.03]} rotation={[0.3 * Math.cos(angle), angle, 0.3 * Math.sin(angle)]}>
           <sphereGeometry args={[0.04, 6, 4]} />
@@ -467,33 +495,23 @@ function Plant() {
   );
 }
 
-// ===== 纸和铅笔 =====
 function PaperAndPencil() {
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0.1]}>
-        <planeGeometry args={[0.3, 0.4]} />
-        <meshStandardMaterial color={C.paper} roughness={0.9} side={THREE.DoubleSide} />
-      </mesh>
-      <mesh position={[0.1, 0.02, 0.05]} rotation={[0, 0.5, Math.PI / 2]}>
-        <cylinderGeometry args={[0.008, 0.008, 0.25, 6]} />
-        <meshStandardMaterial color={C.pencil} roughness={0.5} />
-      </mesh>
-      <mesh position={[0.21, 0.02, 0.01]} rotation={[0, 0.5, Math.PI / 2]}>
-        <coneGeometry args={[0.008, 0.03, 6]} />
-        <meshStandardMaterial color="#F5DEB3" roughness={0.5} />
-      </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0.1]}><planeGeometry args={[0.3, 0.4]} /><meshStandardMaterial color={C.paper} roughness={0.9} side={THREE.DoubleSide} /></mesh>
+      <mesh position={[0.1, 0.02, 0.05]} rotation={[0, 0.5, Math.PI / 2]}><cylinderGeometry args={[0.008, 0.008, 0.25, 6]} /><meshStandardMaterial color={C.pencil} roughness={0.5} /></mesh>
+      <mesh position={[0.21, 0.02, 0.01]} rotation={[0, 0.5, Math.PI / 2]}><coneGeometry args={[0.008, 0.03, 6]} /><meshStandardMaterial color="#F5DEB3" roughness={0.5} /></mesh>
     </group>
   );
 }
 
-// ===== 悬停提示 UI =====
+// ===== 悬停提示 =====
 function HoverTooltip({ name }: { name: string | null }) {
   if (!name || !ITEM_CONFIG[name]) return null;
   const config = ITEM_CONFIG[name];
   return (
     <div className="pointer-events-none absolute left-1/2 bottom-20 z-20 -translate-x-1/2 animate-[fadeIn_0.2s_ease]">
-      <div className="flex items-center gap-3 rounded-2xl border border-white/20 bg-white/80 px-5 py-3 shadow-xl backdrop-blur-md">
+      <div className="flex items-center gap-3 rounded-2xl border border-amber-200/50 bg-white/85 px-5 py-3 shadow-xl backdrop-blur-md">
         <span className="text-base font-semibold text-gray-800">{config.label}</span>
         <span className="rounded-full bg-amber-100 px-3 py-0.5 text-xs font-medium text-amber-700">
           {config.hint}
@@ -503,56 +521,41 @@ function HoverTooltip({ name }: { name: string | null }) {
   );
 }
 
-// ===== 完整场景 =====
+// ===== 场景 =====
 function Scene({ onHover, onItemClick }: { onHover: (name: string | null) => void; onItemClick: (name: string) => void }) {
   return (
     <>
-      {/* 明亮光照 */}
-      <ambientLight intensity={0.7} color="#FFF8F0" />
-      {/* 窗户阳光 */}
-      <directionalLight
-        position={[2, 6, 4]}
-        intensity={1.2}
-        color="#FFF5E0"
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
-      />
-      {/* 补光 */}
-      <directionalLight position={[-3, 4, 2]} intensity={0.3} color="#E0E8FF" />
-      {/* 环境 */}
+      {/* 温暖光照 */}
+      <ambientLight intensity={0.5} color="#FFF5E8" />
+      {/* 窗户暖阳 */}
+      <directionalLight position={[1, 5, 3]} intensity={1.0} color="#FFE8C0" castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
+      {/* 侧面补光 */}
+      <directionalLight position={[-3, 3, 1]} intensity={0.25} color="#E8E0FF" />
       <Environment preset="apartment" />
+
+      {/* 窗外风景（在墙后面）*/}
+      <Scenery />
 
       {/* 房间 */}
       <Room />
-      <Window />
-      <WallFrame />
-      <WallClock />
+      <BigWindow />
+      <WallArt />
 
       {/* 桌子 */}
       <Desk />
 
-      {/* 桌面物品 — 相对于桌子位置 */}
-      <group position={[0, 1.06, -1.2]}>
+      {/* 桌面物品 */}
+      <group position={[0, 1.06, -1.5]}>
         <InteractiveItem name="monitor" position={[0, 0, -0.5]} onHover={onHover} onClick={onItemClick}>
           <Monitor />
         </InteractiveItem>
 
-        <group position={[0, 0, 0.2]}>
-          <Keyboard />
-        </group>
-        <group position={[0.65, 0, 0.2]} rotation={[-Math.PI / 2, 0, 0]}>
-          <Mouse />
-        </group>
-
-        <group position={[-1.5, 0, -0.4]}>
-          <DeskLamp />
-        </group>
+        <group position={[0, 0, 0.2]}><Keyboard /></group>
+        <group position={[0.65, 0, 0.2]} rotation={[-Math.PI / 2, 0, 0]}><Mouse /></group>
+        <group position={[-1.5, 0, -0.4]}><DeskLamp /></group>
 
         <InteractiveItem name="gamepad" position={[1.2, 0, 0.5]} onHover={onHover} onClick={onItemClick}>
-          <Float speed={2} rotationIntensity={0.1} floatIntensity={0.08}>
-            <Gamepad />
-          </Float>
+          <Float speed={2} rotationIntensity={0.1} floatIntensity={0.08}><Gamepad /></Float>
         </InteractiveItem>
 
         <InteractiveItem name="camera" position={[-1.2, 0, 0.6]} onHover={onHover} onClick={onItemClick}>
@@ -572,14 +575,12 @@ function Scene({ onHover, onItemClick }: { onHover: (name: string | null) => voi
         </InteractiveItem>
 
         <group position={[1.7, 0, -0.75]}>
-          <Float speed={1.5} rotationIntensity={0} floatIntensity={0.05}>
-            <Plant />
-          </Float>
+          <Float speed={1.5} rotationIntensity={0} floatIntensity={0.05}><Plant /></Float>
         </group>
       </group>
 
       <OrbitControls
-        target={[0, 1.5, -0.5]}
+        target={[0, 1.5, -1]}
         enablePan={false}
         enableZoom={false}
         minPolarAngle={Math.PI / 5}
@@ -593,37 +594,33 @@ function Scene({ onHover, onItemClick }: { onHover: (name: string | null) => voi
   );
 }
 
-// ===== 加载占位 =====
 function LoadingFallback() {
   return (
-    <div className="flex h-full items-center justify-center bg-[#FFF8F0]">
+    <div className="flex h-full items-center justify-center" style={{ background: "linear-gradient(to bottom, #FFE8C0, #FFF5E8)" }}>
       <div className="flex flex-col items-center gap-4">
         <div className="h-10 w-10 animate-spin rounded-full border-3 border-amber-400 border-t-transparent" />
-        <span className="text-sm text-gray-400">加载工作台...</span>
+        <span className="text-sm text-amber-400/60">加载中...</span>
       </div>
     </div>
   );
 }
 
-// ===== 主导出 =====
 export default function DeskScene() {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const handleItemClick = useCallback((name: string) => {
     const config = ITEM_CONFIG[name];
-    if (config) {
-      window.location.href = config.href;
-    }
+    if (config) window.location.href = config.href;
   }, []);
 
   return (
     <div className="relative h-full w-full">
       <Suspense fallback={<LoadingFallback />}>
         <Canvas
-          camera={{ position: [5, 4.5, 5], fov: 38 }}
+          camera={{ position: [0, 3.8, 4], fov: 42 }}
           dpr={[1, 2]}
           gl={{ antialias: true }}
-          style={{ background: "#E8F4FD" }}
+          style={{ background: "linear-gradient(to bottom, #FFE0B0, #FFF5E8)" }}
           shadows
         >
           <Scene onHover={setHoveredItem} onItemClick={handleItemClick} />
